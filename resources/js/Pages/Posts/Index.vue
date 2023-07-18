@@ -10,7 +10,7 @@ const props = defineProps({
 
 const last = ref(null)
 
-useIntersectionObserver(last, ([{ isIntersecting }]) => {
+const { stop } = useIntersectionObserver(last, ([{ isIntersecting }]) => {
     if (!isIntersecting) {
         return
     }
@@ -18,6 +18,10 @@ useIntersectionObserver(last, ([{ isIntersecting }]) => {
     axios.get(`${props.posts.meta.path}?cursor=${props.posts.meta.next_cursor}`).then((response) => {
         props.posts.data = [...props.posts.data, ...response.data.data]
         props.posts.meta = response.data.meta
+
+        if (!response.data.meta.next_cursor) {
+            stop()
+        }
     })
 })
 </script>
