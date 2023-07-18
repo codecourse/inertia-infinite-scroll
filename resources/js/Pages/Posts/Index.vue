@@ -2,6 +2,7 @@
 import { Head, router } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useIntersectionObserver } from '@vueuse/core'
+import axios from 'axios'
 
 const props = defineProps({
     posts: Object
@@ -15,11 +16,8 @@ useIntersectionObserver(last, ([{ isIntersecting }]) => {
         return
     }
 
-    router.reload({
-        data: { page: props.posts.meta.current_page + 1 },
-        onSuccess: () => {
-            postsState.value = [...postsState.value, ...props.posts.data]
-        }
+    axios.get(props.posts.links.next).then((response) => {
+        postsState.value = [...postsState.value, ...response.data.data]
     })
 })
 </script>
