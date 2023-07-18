@@ -8,7 +8,6 @@ const props = defineProps({
     posts: Object
 })
 
-const postsState = ref(props.posts.data)
 const last = ref(null)
 
 useIntersectionObserver(last, ([{ isIntersecting }]) => {
@@ -16,15 +15,16 @@ useIntersectionObserver(last, ([{ isIntersecting }]) => {
         return
     }
 
-    axios.get(props.posts.links.next).then((response) => {
-        postsState.value = [...postsState.value, ...response.data.data]
+    axios.get(`${props.posts.meta.path}?cursor=${props.posts.meta.next_cursor}`).then((response) => {
+        props.posts.data = [...props.posts.data, ...response.data.data]
+        props.posts.meta = response.data.meta
     })
 })
 </script>
 
 <template>
     <div class="max-w-2xl mx-auto my-12 space-y-12">
-        <div v-for="post in postsState" :key="post.id">
+        <div v-for="post in posts.data" :key="post.id">
             <h1 class="font-bold text-3xl">{{ post.id }}: {{ post.title }}</h1>
             <p class="mt-2 text-lg">{{ post.teaser }}</p>
         </div>

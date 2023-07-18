@@ -10,7 +10,7 @@ class PostIndexController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $posts = Post::latest()->paginate(10);
+        $posts = Post::latest()->cursorPaginate(10);
 
         if ($request->wantsJson()) {
             return PostResource::collection($posts);
