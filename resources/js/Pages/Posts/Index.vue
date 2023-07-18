@@ -28,7 +28,7 @@ useIntersectionObserver(last, ([{ isIntersecting }]) => {
             <h1 class="font-bold text-3xl">{{ post.id }}: {{ post.title }}</h1>
             <p class="mt-2 text-lg">{{ post.teaser }}</p>
         </div>
-        <div ref="last"></div>
+        <div ref="last" class="-translate-y-32"></div>
     </div>
     <Head title="Posts" />
 </template>
